@@ -37,7 +37,7 @@
             color: #fff;
             letter-spacing: 2px;
             text-transform: uppercase;
-            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink), 0 0 30px rgba(255, 0, 255, 0.5);
+            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
             line-height: 1.8;
             padding: 0 40px;
         }
@@ -67,12 +67,12 @@
 
         .fly-img {
             position: absolute;
-            width: 80px; height: 80px;
+            width: 70px; height: 70px;
             object-fit: cover;
             border-radius: 50%;
             border: 2px solid white;
             z-index: 50;
-            transition: all 6.0s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: all 2.5s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
@@ -106,17 +106,15 @@
             100% { top: 15%; opacity: 0; } 
         }
 
-        /* Center alignment for the final romantic speech */
+        /* Positioned BELOW the heart */
         #final-msg {
             display: none;
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
+            bottom: 10%;
+            width: 100%;
             z-index: 200;
             text-align: center;
-            animation: fadeIn 3s ease forwards;
+            animation: fadeIn 2s ease forwards;
         }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -168,15 +166,14 @@
         <div class="glass-card">
             <h2 class="neon-text" style="font-weight: 300;">Something beautiful for you...</h2>
             <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <button id="yes-final" onclick="formHeart()">SHOW ME</button>
+                <button id="yes-final" onclick="startMegaAnimation()">SHOW ME</button>
                 <button id="no-btn" onmouseover="moveNo()">NO</button>
             </div>
         </div>
     </div>
 
-    <!-- Final Centered Message -->
     <div id="final-msg">
-        <p class="neon-text" style="font-size: 0.95rem; font-weight: 300; text-transform: none; padding: 0;">
+        <p class="neon-text" style="font-size: 0.9rem; font-weight: 300; text-transform: none;">
             here my prettyyyy girlfriend batrishaa hehe you’re naturally pretty without even trying, and everything about you just feels perfect to me iloveyouu sayanggg muahhhh hehehhe
         </p>
     </div>
@@ -227,18 +224,14 @@
             let i = 0;
             const timer = setInterval(() => {
                 if(i < q.length) { txt.innerText = q[i]; i++; }
-                else { 
-                    clearInterval(timer); 
-                    document.getElementById('stage-2').style.display='none'; 
-                    startEffects(); 
-                }
+                else { clearInterval(timer); document.getElementById('stage-2').style.display='none'; startEffects(); }
             }, 1000);
         }
 
         function startEffects() {
             document.getElementById('stage-3').style.display = 'flex';
             setInterval(spawnEmoji, 600);
-            for(let i=0; i<18; i++) { setTimeout(createImg, i * 400); }
+            for(let i=0; i<25; i++) { setTimeout(createImg, i * 300); }
             setTimeout(() => { document.getElementById('stage-4').style.display = 'flex'; }, 13000);
         }
 
@@ -267,10 +260,7 @@
 
         function animateImg(el) {
             const dur = Math.random() * 4000 + 6000;
-            const anim = el.animate([
-                { top: '110vh' }, { top: '-20vh' }
-            ], { duration: dur, iterations: Infinity });
-            el.dataset.animId = anim;
+            const anim = el.animate([{ top: '110vh' }, { top: '-20vh' }], { duration: dur, iterations: Infinity });
         }
 
         function moveNo() {
@@ -280,27 +270,63 @@
             btn.style.top = Math.random() * 70 + 'vh';
         }
 
-        function formHeart() {
+        function startMegaAnimation() {
             isFinal = true;
             document.getElementById('stage-4').style.display = 'none';
             document.getElementById('stage-3').style.display = 'none';
             
-            activeImgs.forEach((img, index) => {
-                img.getAnimations().forEach(a => a.cancel());
-                
-                const t = (index / activeImgs.length) * 2 * Math.PI;
-                const x = 16 * Math.pow(Math.sin(t), 3);
-                const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-                
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2; // Perfectly centered
-                
-                img.style.left = (centerX + x * 10 - 40) + 'px';
-                img.style.top = (centerY + y * 10 - 40) + 'px';
-                img.style.transform = 'scale(1.2)';
+            // Stop current floating animations
+            activeImgs.forEach(img => img.getAnimations().forEach(a => a.cancel()));
+
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2 - 50;
+
+            // Step 1: Form "I"
+            activeImgs.forEach((img, i) => {
+                const yPos = (i / activeImgs.length) * 200 - 100;
+                img.style.left = (centerX - 35) + 'px';
+                img.style.top = (centerY + yPos) + 'px';
             });
 
-            setTimeout(() => { document.getElementById('final-msg').style.display = 'block'; }, 4500);
+            // Step 2: Form "LOVE" (Heart Shape)
+            setTimeout(() => {
+                activeImgs.forEach((img, index) => {
+                    const t = (index / activeImgs.length) * 2 * Math.PI;
+                    const x = 16 * Math.pow(Math.sin(t), 3);
+                    const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                    img.style.left = (centerX + x * 10 - 35) + 'px';
+                    img.style.top = (centerY + y * 10 - 35) + 'px';
+                });
+            }, 3000);
+
+            // Step 3: Form "U"
+            setTimeout(() => {
+                activeImgs.forEach((img, i) => {
+                    const t = (i / activeImgs.length) * Math.PI;
+                    const x = Math.cos(t + Math.PI) * 100;
+                    const y = Math.sin(t + Math.PI) * 100;
+                    if(i < activeImgs.length/2) { // Sides of U
+                         img.style.left = (centerX + (i % 2 === 0 ? -100 : 100) - 35) + 'px';
+                         img.style.top = (centerY - 100 + (i*10)) + 'px';
+                    } else { // Bottom of U
+                         img.style.left = (centerX + x - 35) + 'px';
+                         img.style.top = (centerY + y - 35) + 'px';
+                    }
+                });
+            }, 6000);
+
+            // Final: Back to Heart & Show Text
+            setTimeout(() => {
+                activeImgs.forEach((img, index) => {
+                    const t = (index / activeImgs.length) * 2 * Math.PI;
+                    const x = 16 * Math.pow(Math.sin(t), 3);
+                    const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                    img.style.left = (centerX + x * 12 - 35) + 'px';
+                    img.style.top = (centerY + y * 12 - 35) + 'px';
+                    img.style.transform = 'scale(1.1)';
+                });
+                document.getElementById('final-msg').style.display = 'block';
+            }, 9000);
         }
 
         document.addEventListener('contextmenu', e => e.preventDefault());
