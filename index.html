@@ -9,7 +9,6 @@
         :root {
             --maroon: #800000;
             --neon-pink: #ff00ff;
-            --pink-glow: #ff69b4;
         }
 
         body, html {
@@ -37,10 +36,9 @@
             font-weight: 800;
             color: #fff;
             text-transform: uppercase;
-            text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
             line-height: 2;
             padding: 0 30px;
-            z-index: 100;
         }
 
         .glass-card {
@@ -50,7 +48,6 @@
             padding: 30px;
             width: 80%;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 110;
         }
 
         button {
@@ -60,39 +57,37 @@
             border: none;
             font-weight: bold;
             cursor: pointer;
-            z-index: 120;
         }
 
         #yes-btn, #yes-final { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
         #no-btn { background: white; color: black; position: relative; }
 
-        /* Gambar Bulat - Macam kau nak */
+        /* Gambar Bulat */
         .fly-img {
             position: absolute;
-            width: 85px; height: 85px;
+            width: 75px; height: 75px;
             object-fit: cover;
             border-radius: 50%;
             border: 3px solid var(--neon-pink);
             z-index: 50;
-            transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Transition diperlahankan untuk efek berkumpul yang lawa */
+            transition: all 2.5s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
         }
 
-        /* Floating Emojis */
         .emoji-float {
             position: absolute;
             bottom: -50px;
             z-index: 40;
             font-size: 1.5rem;
             animation: floatUp linear forwards;
-            pointer-events: none;
         }
 
         @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0); opacity: 0; }
+            0% { transform: translateY(0); opacity: 0; }
             10% { opacity: 1; }
             90% { opacity: 1; }
-            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+            100% { transform: translateY(-110vh); opacity: 0; }
         }
 
         .scroll-container {
@@ -110,18 +105,21 @@
         #final-msg {
             display: none;
             position: fixed;
-            bottom: 8%;
+            bottom: 10%;
             width: 100%;
             z-index: 200;
+            animation: fadeIn 2s ease;
         }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .footer {
             position: fixed;
-            bottom: 5px;
+            bottom: 10px;
             width: 100%;
             text-align: center;
             font-size: 0.7rem;
-            color: gray;
+            color: rgba(255,255,255,0.4);
             z-index: 210;
         }
     </style>
@@ -130,6 +128,7 @@
 
     <canvas id="matrix"></canvas>
 
+    <!-- Tahap 1 -->
     <div id="stage-1" class="overlay">
         <div class="glass-card">
             <h2 class="neon-text">ARE YOU READY?</h2>
@@ -137,10 +136,12 @@
         </div>
     </div>
 
+    <!-- Tahap 2: Countdown -->
     <div id="stage-2" class="overlay" style="display:none;">
         <h1 id="cd-txt" class="neon-text" style="font-size: 4rem;"></h1>
     </div>
 
+    <!-- Tahap 3: Scrolling & Emojis -->
     <div id="stage-3" class="overlay" style="display:none; background: transparent;">
         <div id="scroll-box" class="scroll-container">
             <p class="neon-text">
@@ -149,6 +150,7 @@
         </div>
     </div>
 
+    <!-- Tahap 4: Pop Up Soalan -->
     <div id="stage-4" class="overlay" style="display:none;">
         <div class="glass-card">
             <h2 class="neon-text">WANNA SEE SOMETHING?</h2>
@@ -159,6 +161,7 @@
         </div>
     </div>
 
+    <!-- Tahap Akhir: Final Message -->
     <div id="final-msg">
         <h2 class="neon-text">SAYA SAYANGG AWAKKKK SANGATT SANGATTTT</h2>
     </div>
@@ -198,30 +201,30 @@
             'https://i.ibb.co/KpxgXbBP/e5e4a40f-562f-4b64-88fd-209675fc6711.jpg'
         ];
         const emojis = ['💘','💓','💕','💞','💝','💖','💗'];
-
         let activeImgs = [];
         let isFinal = false;
 
         function startSequence() {
             document.getElementById('stage-1').style.display = 'none';
-            const txt = document.getElementById('cd-txt');
             document.getElementById('stage-2').style.display = 'flex';
-
+            const txt = document.getElementById('cd-txt');
             const q = ['3','2','1','SAYA','SAYANG','AWAK'];
             let i = 0;
             const timer = setInterval(() => {
                 if(i < q.length) { txt.innerText = q[i]; i++; }
-                else { clearInterval(timer); document.getElementById('stage-2').style.display='none'; startEffects(); }
+                else { 
+                    clearInterval(timer); 
+                    document.getElementById('stage-2').style.display='none'; 
+                    startEffects(); 
+                }
             }, 800);
         }
 
         function startEffects() {
             document.getElementById('stage-3').style.display = 'flex';
-            // Loop Emojis & Images
             setInterval(spawnEmoji, 400);
-            for(let i=0; i<12; i++) { setTimeout(createImg, i * 600); }
-            
-            setTimeout(() => { document.getElementById('stage-4').style.display = 'flex'; }, 9000);
+            for(let i=0; i<15; i++) { setTimeout(createImg, i * 500); }
+            setTimeout(() => { document.getElementById('stage-4').style.display = 'flex'; }, 8000);
         }
 
         function spawnEmoji() {
@@ -229,7 +232,7 @@
             e.className = 'emoji-float';
             e.innerText = emojis[Math.floor(Math.random()*emojis.length)];
             e.style.left = Math.random() * 100 + 'vw';
-            const dur = Math.random() * 3 + 3;
+            const dur = Math.random() * 3 + 4;
             e.style.animationDuration = dur + 's';
             document.body.appendChild(e);
             setTimeout(() => e.remove(), dur * 1000);
@@ -248,7 +251,7 @@
         }
 
         function animateImg(el) {
-            const dur = Math.random() * 4000 + 4000;
+            const dur = Math.random() * 3000 + 5000;
             const anim = el.animate([
                 { top: '110vh' }, { top: '-15vh' }
             ], { duration: dur, iterations: Infinity });
@@ -270,19 +273,21 @@
             activeImgs.forEach((img, index) => {
                 img.getAnimations().forEach(a => a.cancel());
                 
+                // Formula Hati (Heart Curve)
                 const t = (index / activeImgs.length) * 2 * Math.PI;
                 const x = 16 * Math.pow(Math.sin(t), 3);
                 const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
                 
                 const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2 - 40;
+                const centerY = window.innerHeight / 2 - 30;
                 
-                img.style.left = (centerX + x * 10 - 42) + 'px';
-                img.style.top = (centerY + y * 10 - 42) + 'px';
-                img.style.transform = 'scale(1.1)';
+                // Posisi akhir dengan transition yang slow
+                img.style.left = (centerX + x * 9 - 37) + 'px';
+                img.style.top = (centerY + y * 9 - 37) + 'px';
+                img.style.transform = 'scale(1.2)';
             });
 
-            setTimeout(() => { document.getElementById('final-msg').style.display = 'block'; }, 1000);
+            setTimeout(() => { document.getElementById('final-msg').style.display = 'block'; }, 2000);
         }
 
         document.addEventListener('contextmenu', e => e.preventDefault());
