@@ -2,118 +2,134 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Girl</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Queen</title>
     <style>
         :root {
             --maroon: #800000;
             --pink: #ff69b4;
+            --glass: rgba(255, 255, 255, 0.1);
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
             overflow: hidden;
             background-color: black;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            -webkit-touch-callout: none;
+            user-select: none;
         }
 
-        /* Matrix Background */
         canvas {
             display: block;
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             z-index: 1;
         }
 
-        /* Overlay Layers */
+        /* UI Containers */
         .overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: 10;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: rgba(0,0,0,0.85);
-            transition: opacity 0.5s ease;
-        }
-
-        #main-content {
-            display: none;
-            z-index: 5;
-            text-align: center;
-            color: white;
-            width: 100%;
-            height: 100%;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            transition: all 0.8s ease;
         }
 
-        /* UI Elements */
         .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 20px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            max-width: 80%;
+            border-radius: 30px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            width: 85%;
+            max-width: 400px;
         }
 
-        button {
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            background: var(--maroon);
-            color: white;
+        /* Buttons & Text */
+        #ready-btn {
+            background: linear-gradient(45deg, var(--maroon), #b03030);
             border: none;
+            padding: 15px 50px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.3s ease;
-            box-shadow: 0 0 15px var(--maroon);
+            box-shadow: 0 5px 20px rgba(128, 0, 0, 0.4);
+            margin-top: 20px;
         }
 
-        button:hover {
-            transform: scale(1.1);
-        }
-
-        #countdown-text {
-            font-size: 5rem;
-            font-weight: bold;
+        #countdown-txt {
+            font-size: 4rem;
+            font-weight: 800;
             color: var(--pink);
             text-shadow: 0 0 20px var(--pink);
         }
 
-        /* Image Security */
-        .photo-container {
+        /* Floating Images & Hearts */
+        .floating-item {
+            position: absolute;
+            bottom: -150px;
+            z-index: 5;
+            pointer-events: none;
+            animation: flyUp linear forwards;
+        }
+
+        .floating-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--pink);
+            box-shadow: 0 0 15px var(--pink);
+        }
+
+        @keyframes flyUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Scrolling Text Section */
+        #final-section {
+            display: none;
+            height: 100vh;
+            overflow: hidden;
             position: relative;
-            margin-bottom: 20px;
-            user-select: none;
-            -webkit-user-drag: none;
         }
 
-        .photo-container img {
-            max-width: 300px;
-            border-radius: 15px;
-            pointer-events: none; /* Block right click/drag */
-            border: 3px solid var(--maroon);
+        .scrolling-wrapper {
+            position: absolute;
+            top: 100%;
+            width: 100%;
+            text-align: center;
+            animation: scrollUp 25s linear forwards;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
 
-        .love-icons {
+        .scrolling-wrapper p {
             font-size: 1.5rem;
-            margin-top: 15px;
+            line-height: 2;
+            font-weight: 600;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
         }
 
-        .sweet-text {
-            font-style: italic;
-            line-height: 1.6;
-            margin-top: 20px;
+        @keyframes scrollUp {
+            0% { top: 100%; }
+            100% { top: -150%; }
         }
     </style>
 </head>
@@ -121,32 +137,29 @@
 
     <canvas id="matrix"></canvas>
 
-    <!-- Initial Pop-up -->
-    <div id="popup-ready" class="overlay">
+    <div id="stage-ready" class="overlay">
         <div class="glass-card">
-            <h1 style="color: white;">Are you ready?</h1>
-            <button onclick="startSequence()">YES</button>
+            <h1 style="margin-bottom: 10px;">For My Love,</h1>
+            <h2 style="color: var(--pink); margin-top: 0;">Nur Batrisha</h2>
+            <p>Are you ready?</p>
+            <button id="ready-btn" onclick="startSequence()">YES</button>
         </div>
     </div>
 
-    <!-- Countdown Layer -->
-    <div id="countdown-layer" class="overlay" style="display: none;">
-        <div id="countdown-text"></div>
+    <div id="stage-countdown" class="overlay" style="display: none; background: rgba(0,0,0,0.4);">
+        <div id="countdown-txt"></div>
     </div>
 
-    <!-- Main Content -->
-    <div id="main-content" class="overlay" style="background: transparent;">
-        <div class="glass-card">
-            <div class="photo-container">
-                <!-- LETAK URL GAMBAR KAU KAT SINI -->
-                <img src="https://i.ibb.co/mCs6T5cR/IMG-5514.jpg" alt="Nur Batrisha">
-            </div>
-            <h2 style="color: var(--pink);">Nur Batrisha</h2>
-            <div class="love-icons">💞💕💓💗💓💝💘💖</div>
-            <p class="sweet-text">
-                "Setiap detik yang berlalu, <br>
-                hanya nama awak yang mekar di hati. <br>
-                Terima kasih sebab sentiasa ada untuk saya."
+    <div id="final-section" class="overlay" style="background: transparent;">
+        <div class="scrolling-wrapper">
+            <p>
+                SAYA SAYANGG AWAK SANGAT SANGATTT TAUUU <br><br>
+                HURMM SAYA MINTA MAAFF KALAU SAYA ADA BUAT SALAH DENGAN AWAKKK <br><br>
+                SAYA MINTA MAAFFF TAUUU SAYANGGGGG <br><br>
+                SAYA SAYANGGGG AWAKKK SANGATTT SANGATTT <br><br>
+                SAYA SENTIASAA RINDUU AWAKKKK HEHEHHEHE <br><br>
+                LOPYYUUU CAYANGGGG <br><br>
+                MUAHHHHH 💋
             </p>
         </div>
     </div>
@@ -154,11 +167,9 @@
     <script>
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
-
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        // Custom Matrix Characters
         const name = "NURBATRISHA";
         const fontSize = 16;
         const columns = canvas.width / fontSize;
@@ -167,57 +178,79 @@
         function drawMatrix() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = '#800000'; // Maroon
+            ctx.fillStyle = '#800000';
             ctx.font = fontSize + 'px monospace';
-
             for (let i = 0; i < drops.length; i++) {
                 const text = name.charAt(Math.floor(Math.random() * name.length));
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             }
         }
-
         setInterval(drawMatrix, 50);
 
-        function startSequence() {
-            document.getElementById('popup-ready').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('popup-ready').style.display = 'none';
-                runCountdown();
-            }, 500);
+        const imgUrls = [
+            'https://i.ibb.co/mCs6T5cR/IMG-5514.jpg',
+            'https://i.ibb.co/99PQ8Q52/IMG-5306.jpg',
+            'https://i.ibb.co/CpktD9pm/0e89767b-8c56-49e0-a95d-a00625f03bd8.jpg',
+            'https://i.ibb.co/67VW0tyG/bc481f2e-352e-447d-89ec-9f0d40141afd.jpg',
+            'https://i.ibb.co/KpxgXbBP/e5e4a40f-562f-4b64-88fd-209675fc6711.jpg'
+        ];
+        const loves = ['💞','💕','💓','💗','💝','💘','💖'];
+
+        function createFloatingItem() {
+            const container = document.getElementById('final-section');
+            if (container.style.display !== 'flex') return;
+
+            const div = document.createElement('div');
+            div.className = 'floating-item';
+            
+            // Randomly choose image or love icon
+            if (Math.random() > 0.4) {
+                const img = document.createElement('img');
+                img.src = imgUrls[Math.floor(Math.random() * imgUrls.length)];
+                div.appendChild(img);
+            } else {
+                div.innerText = loves[Math.floor(Math.random() * loves.length)];
+                div.style.fontSize = Math.random() * 40 + 20 + 'px';
+            }
+
+            div.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 3 + 4; // 4-7 seconds
+            div.style.animationDuration = duration + 's';
+
+            container.appendChild(div);
+            setTimeout(() => div.remove(), duration * 1000);
         }
 
-        function runCountdown() {
-            const countdownLayer = document.getElementById('countdown-layer');
-            const countdownText = document.getElementById('countdown-text');
-            countdownLayer.style.display = 'flex';
+        function startSequence() {
+            document.getElementById('stage-ready').style.display = 'none';
+            const cdLayer = document.getElementById('stage-countdown');
+            const cdTxt = document.getElementById('countdown-txt');
+            cdLayer.style.display = 'flex';
 
-            const sequence = ['3', '2', '1', 'SAYA', 'SAYANG', 'AWAK'];
-            let index = 0;
-
-            const interval = setInterval(() => {
-                if (index < sequence.length) {
-                    countdownText.innerText = sequence[index];
-                    index++;
+            const seq = ['3', '2', '1', 'SAYA', 'SAYANG', 'AWAK'];
+            let i = 0;
+            const timer = setInterval(() => {
+                if (i < seq.length) {
+                    cdTxt.innerText = seq[i];
+                    i++;
                 } else {
-                    clearInterval(interval);
-                    showFinalContent();
+                    clearInterval(timer);
+                    cdLayer.style.display = 'none';
+                    showFinal();
                 }
             }, 1000);
         }
 
-        function showFinalContent() {
-            document.getElementById('countdown-layer').style.display = 'none';
-            document.getElementById('main-content').style.display = 'flex';
+        function showFinal() {
+            document.getElementById('final-section').style.display = 'flex';
+            setInterval(createFloatingItem, 600); // Start flying things
         }
 
-        // Disable Right Click
-        document.addEventListener('contextmenu', event => event.preventDefault());
+        // Prevent Right Click & Drag
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('dragstart', e => e.preventDefault());
     </script>
 </body>
 </html>
