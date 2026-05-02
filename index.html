@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>For My Queen</title>
+    <title>For My Batrisha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
     <style>
         :root {
             --maroon: #800000;
-            --pink: #ff69b4;
-            --glass: rgba(255, 255, 255, 0.1);
+            --neon-pink: #ff00ff;
+            --pink-glow: #ff69b4;
         }
 
         body, html {
@@ -18,118 +19,81 @@
             background-color: black;
             font-family: 'Poppins', sans-serif;
             color: white;
-            -webkit-touch-callout: none;
-            user-select: none;
         }
 
-        canvas {
-            display: block;
-            position: fixed;
-            top: 0; left: 0;
-            z-index: 1;
-        }
+        canvas { position: fixed; top: 0; left: 0; z-index: 1; }
 
-        /* UI Containers */
         .overlay {
-            position: fixed;
-            top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: 10;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            transition: all 0.8s ease;
+            z-index: 10; display: flex;
+            justify-content: center; align-items: center;
+            flex-direction: column; text-align: center;
+        }
+
+        /* Neon Text Style */
+        .neon-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--neon-pink), 0 0 30px var(--neon-pink), 0 0 40px var(--neon-pink);
+            line-height: 2;
+            padding: 0 30px;
         }
 
         .glass-card {
-            background: var(--glass);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 30px;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            width: 85%;
-            max-width: 400px;
+            padding: 30px;
+            width: 80%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Buttons & Text */
-        #ready-btn {
-            background: linear-gradient(45deg, var(--maroon), #b03030);
-            border: none;
-            padding: 15px 50px;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: bold;
+        button {
+            padding: 12px 35px;
+            margin: 10px;
             border-radius: 50px;
+            border: none;
+            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 5px 20px rgba(128, 0, 0, 0.4);
-            margin-top: 20px;
+            transition: 0.3s;
         }
 
-        #countdown-txt {
-            font-size: 4rem;
-            font-weight: 800;
-            color: var(--pink);
-            text-shadow: 0 0 20px var(--pink);
-        }
+        #yes-btn { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
+        #no-btn { background: white; color: black; position: relative; }
 
-        /* Floating Images & Hearts */
-        .floating-item {
+        /* Floating Images */
+        .fly-img {
             position: absolute;
-            bottom: -150px;
-            z-index: 5;
-            pointer-events: none;
-            animation: flyUp linear forwards;
-        }
-
-        .floating-item img {
-            width: 100px;
-            height: 100px;
+            width: 80px; height: 80px;
             object-fit: cover;
             border-radius: 50%;
-            border: 3px solid var(--pink);
-            box-shadow: 0 0 15px var(--pink);
+            border: 2px solid var(--neon-pink);
+            z-index: 5;
+            transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes flyUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* Scrolling Text Section */
-        #final-section {
-            display: none;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .scrolling-wrapper {
+        /* Scrolling Animation */
+        .scroll-container {
             position: absolute;
-            top: 100%;
             width: 100%;
-            text-align: center;
-            animation: scrollUp 25s linear forwards;
-            padding: 0 20px;
-            box-sizing: border-box;
-        }
-
-        .scrolling-wrapper p {
-            font-size: 1.5rem;
-            line-height: 2;
-            font-weight: 600;
-            color: white;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+            animation: scrollUp 15s linear forwards;
         }
 
         @keyframes scrollUp {
             0% { top: 100%; }
-            100% { top: -150%; }
+            100% { top: -20%; } /* Berhenti kat tengah */
+        }
+
+        #final-love-msg {
+            display: none;
+            position: fixed;
+            bottom: 10%;
+            width: 100%;
+            z-index: 20;
         }
     </style>
 </head>
@@ -137,31 +101,42 @@
 
     <canvas id="matrix"></canvas>
 
-    <div id="stage-ready" class="overlay">
+    <!-- Stage 1: Are You Ready -->
+    <div id="stage-1" class="overlay">
         <div class="glass-card">
-            <h1 style="margin-bottom: 10px;">For My Love,</h1>
-            <h2 style="color: var(--pink); margin-top: 0;">Nur Batrisha</h2>
-            <p>Are you ready?</p>
-            <button id="ready-btn" onclick="startSequence()">YES</button>
+            <h2 class="neon-text">ARE YOU READY?</h2>
+            <button id="yes-btn" onclick="startSequence()">YES</button>
         </div>
     </div>
 
-    <div id="stage-countdown" class="overlay" style="display: none; background: rgba(0,0,0,0.4);">
-        <div id="countdown-txt"></div>
+    <!-- Stage 2: Countdown -->
+    <div id="stage-2" class="overlay" style="display:none;">
+        <h1 id="cd-txt" class="neon-text" style="font-size: 5rem;"></h1>
     </div>
 
-    <div id="final-section" class="overlay" style="background: transparent;">
-        <div class="scrolling-wrapper">
-            <p>
-                SAYA SAYANGG AWAK SANGAT SANGATTT TAUUU <br><br>
-                HURMM SAYA MINTA MAAFF KALAU SAYA ADA BUAT SALAH DENGAN AWAKKK <br><br>
-                SAYA MINTA MAAFFF TAUUU SAYANGGGGG <br><br>
-                SAYA SAYANGGGG AWAKKK SANGATTT SANGATTT <br><br>
-                SAYA SENTIASAA RINDUU AWAKKKK HEHEHHEHE <br><br>
-                LOPYYUUU CAYANGGGG <br><br>
-                MUAHHHHH 💋
+    <!-- Stage 3: Scrolling & Flying -->
+    <div id="stage-3" class="overlay" style="display:none; background: transparent;">
+        <div id="scroll-box" class="scroll-container">
+            <p class="neon-text">
+                SAYA SAYANGG AWAK SANGAT SANGATTT TAUUU HURMM SAYA MINTA MAAFF KALAU SAYA ADA BUAT SALAH DENGAN AWAKKK SAYA MINTA MAAFFF TAUUU SAYANGGGGG SAYA SAYANGGGG AWAKKK SANGATTT SANGATTT SAYA SENTIASAA RINDUU AWAKKKK HEHEHHEHE LOPYYUUU CAYANGGGG MUAHHHHH
             </p>
         </div>
+    </div>
+
+    <!-- Stage 4: The Question -->
+    <div id="stage-4" class="overlay" style="display:none;">
+        <div class="glass-card">
+            <h2 class="neon-text">WANNA SEE SOMETHING?</h2>
+            <div style="display: flex; justify-content: center;">
+                <button id="yes-final" onclick="formHeart()">YES</button>
+                <button id="no-btn" onmouseover="moveNo()">NO</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stage 5: Final Message -->
+    <div id="final-love-msg">
+        <h2 class="neon-text" style="font-size: 1.5rem;">SAYA SAYANGG AWAKKKK SANGATT SANGATTTT</h2>
     </div>
 
     <script>
@@ -196,61 +171,93 @@
             'https://i.ibb.co/67VW0tyG/bc481f2e-352e-447d-89ec-9f0d40141afd.jpg',
             'https://i.ibb.co/KpxgXbBP/e5e4a40f-562f-4b64-88fd-209675fc6711.jpg'
         ];
-        const loves = ['💞','💕','💓','💗','💝','💘','💖'];
 
-        function createFloatingItem() {
-            const container = document.getElementById('final-section');
-            if (container.style.display !== 'flex') return;
-
-            const div = document.createElement('div');
-            div.className = 'floating-item';
-            
-            // Randomly choose image or love icon
-            if (Math.random() > 0.4) {
-                const img = document.createElement('img');
-                img.src = imgUrls[Math.floor(Math.random() * imgUrls.length)];
-                div.appendChild(img);
-            } else {
-                div.innerText = loves[Math.floor(Math.random() * loves.length)];
-                div.style.fontSize = Math.random() * 40 + 20 + 'px';
-            }
-
-            div.style.left = Math.random() * 100 + 'vw';
-            const duration = Math.random() * 3 + 4; // 4-7 seconds
-            div.style.animationDuration = duration + 's';
-
-            container.appendChild(div);
-            setTimeout(() => div.remove(), duration * 1000);
-        }
+        let activeImgs = [];
 
         function startSequence() {
-            document.getElementById('stage-ready').style.display = 'none';
-            const cdLayer = document.getElementById('stage-countdown');
-            const cdTxt = document.getElementById('countdown-txt');
-            cdLayer.style.display = 'flex';
+            document.getElementById('stage-1').style.display = 'none';
+            const s2 = document.getElementById('stage-2');
+            const txt = document.getElementById('cd-txt');
+            s2.style.display = 'flex';
 
-            const seq = ['3', '2', '1', 'SAYA', 'SAYANG', 'AWAK'];
+            const q = ['3','2','1','SAYA','SAYANG','AWAK'];
             let i = 0;
             const timer = setInterval(() => {
-                if (i < seq.length) {
-                    cdTxt.innerText = seq[i];
-                    i++;
-                } else {
-                    clearInterval(timer);
-                    cdLayer.style.display = 'none';
-                    showFinal();
-                }
+                if(i < q.length) { txt.innerText = q[i]; i++; }
+                else { clearInterval(timer); s2.style.display='none'; startFlying(); }
+            }, 800);
+        }
+
+        function startFlying() {
+            document.getElementById('stage-3').style.display = 'flex';
+            // Spawn images
+            for(let i=0; i<15; i++) {
+                setTimeout(createImg, i * 500);
+            }
+            // Wait for scroll half-way
+            setTimeout(() => {
+                document.getElementById('stage-4').style.display = 'flex';
+            }, 10000);
+        }
+
+        function createImg() {
+            const img = document.createElement('img');
+            img.src = imgUrls[Math.floor(Math.random() * imgUrls.length)];
+            img.className = 'fly-img';
+            img.style.left = Math.random() * 80 + 'vw';
+            img.style.top = '110vh';
+            document.body.appendChild(img);
+            activeImgs.push(img);
+            
+            // Floating animation
+            animateFly(img);
+        }
+
+        function animateFly(el) {
+            if(el.dataset.stopped) return;
+            const duration = Math.random() * 3000 + 3000;
+            el.animate([
+                { top: '110vh' },
+                { top: '-20vh' }
+            ], { duration: duration, iterations: Infinity });
+        }
+
+        function moveNo() {
+            const btn = document.getElementById('no-btn');
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function formHeart() {
+            document.getElementById('stage-4').style.display = 'none';
+            document.getElementById('stage-3').style.display = 'none';
+            
+            activeImgs.forEach((img, index) => {
+                img.getAnimations().forEach(anim => anim.cancel());
+                img.dataset.stopped = "true";
+                
+                // Heart Math
+                const t = (index / activeImgs.length) * 2 * Math.PI;
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2 - 50;
+                const scale = 10; // Saiz love
+
+                img.style.left = (centerX + x * scale - 40) + 'px';
+                img.style.top = (centerY + y * scale - 40) + 'px';
+            });
+
+            setTimeout(() => {
+                document.getElementById('final-love-msg').style.display = 'block';
             }, 1000);
         }
 
-        function showFinal() {
-            document.getElementById('final-section').style.display = 'flex';
-            setInterval(createFloatingItem, 600); // Start flying things
-        }
-
-        // Prevent Right Click & Drag
         document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('dragstart', e => e.preventDefault());
     </script>
 </body>
 </html>
