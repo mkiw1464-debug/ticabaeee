@@ -13,7 +13,7 @@
         .neon-text { font-size: 1rem; font-weight: 600; color: #fff; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px var(--neon-pink); line-height: 1.8; padding: 0 40px; }
         .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border-radius: 40px; padding: 40px; width: 85%; border: 1px solid rgba(255, 255, 255, 0.1); }
         button { padding: 15px 40px; margin: 15px; border-radius: 50px; border: none; font-weight: 800; cursor: pointer; background: white; color: black; }
-        .fly-img { position: absolute; width: 75px; height: 75px; object-fit: cover; border-radius: 50%; border: 2px solid white; z-index: 50; pointer-events: none; will-change: transform, top, left; }
+        .fly-img { position: absolute; width: 70px; height: 70px; object-fit: cover; border-radius: 50%; border: 2px solid white; z-index: 50; pointer-events: none; will-change: transform, top, left; }
         .scroll-container { position: absolute; width: 100%; z-index: 60; animation: scrollUp 18s linear forwards; }
         @keyframes scrollUp { 0% { top: 100%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 15%; opacity: 0; } }
         #final-msg { display: none; position: fixed; bottom: 8%; width: 100%; z-index: 200; text-align: center; animation: fadeIn 2s ease forwards; }
@@ -38,8 +38,7 @@
         <div class="scroll-container">
             <p class="neon-text" style="text-transform: none; font-weight: 300;">
                 I love you more than words can ever express. <br><br>
-                You are the most precious person in my life, <br>
-                Missing you is my constant heartbeat. <br><br>
+                You are the most precious person in my life. <br><br>
                 I am so deeply in love with you, Batrisha.
             </p>
         </div>
@@ -47,7 +46,7 @@
 
     <div id="stage-4" class="overlay" style="display:none;">
         <div class="glass-card">
-            <h2 class="neon-text">Something beautiful for you...</h2>
+            <h2 class="neon-text">For my everything...</h2>
             <button onclick="startMegaAnimation()">SHOW ME</button>
         </div>
     </div>
@@ -64,14 +63,14 @@
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const name = "BATRISHA";
+        const nameStr = "BATRISHA";
         const drops = Array(Math.floor(canvas.width / 14)).fill(1);
 
         function drawMatrix() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.08)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#800000'; ctx.font = '14px Montserrat';
             drops.forEach((y, i) => {
-                const text = name.charAt(Math.floor(Math.random() * name.length));
+                const text = nameStr.charAt(Math.floor(Math.random() * nameStr.length));
                 ctx.fillText(text, i * 14, y * 14);
                 if (y * 14 > canvas.height && Math.random() > 0.985) drops[i] = 0;
                 drops[i]++;
@@ -100,8 +99,8 @@
 
         function startEffects() {
             document.getElementById('stage-3').style.display = 'flex';
-            for(let i=0; i<30; i++) { setTimeout(createImg, i * 350); }
-            setTimeout(() => { document.getElementById('stage-4').style.display = 'flex'; }, 13000);
+            for(let i=0; i<32; i++) { setTimeout(createImg, i * 300); }
+            setTimeout(() => { document.getElementById('stage-4').style.display = 'flex'; }, 11000);
         }
 
         function createImg() {
@@ -122,53 +121,89 @@
             const cx = window.innerWidth / 2;
             const cy = window.innerHeight / 2 - 40;
 
-            // 1. FORM "I"
-            animateToShape((i, total) => ({ x: cx - 37, y: cy - 130 + (i * (260/total)) }));
-            
-            // 2. FORM "LOVE" (After 3s)
+            // 1. Form I (0s)
+            animateToShape((i, total) => ({ x: cx - 35, y: cy - 130 + (i * (260/total)) }));
+
+            // 2. Form LOVE (3s)
             setTimeout(() => {
                 animateToShape((i, total) => {
                     const t = (i / total) * 2 * Math.PI;
                     const x = 16 * Math.pow(Math.sin(t), 3);
                     const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-                    return { x: cx + x * 10.5 - 37, y: cy + y * 10.5 - 37 };
+                    return { x: cx + x * 10 - 35, y: cy + y * 10 - 35 };
                 });
             }, 3000);
 
-            // 3. FORM "U" (After 6s) - ULTRA FIX
-            setTimeout(() => {
-                animateToShape((i, total) => {
-                    const p = i / total;
-                    if (p < 0.35) { // Left Bar (Tegak & Pendek sikit)
-                        return { x: cx - 110, y: cy - 120 + (p / 0.35 * 180) };
-                    } else if (p > 0.65) { // Right Bar (Tegak & Pendek sikit)
-                        return { x: cx + 110, y: cy - 120 + ((1-p) / 0.35 * 180) };
-                    } else { // Curved Bottom (Lebih melengkung & Dalam)
-                        const tU = ((p - 0.35) / 0.3) * Math.PI;
-                        return { x: cx + Math.cos(tU + Math.PI) * 110, y: cy + 60 + Math.sin(tU + Math.PI) * 80 };
-                    }
-                });
-            }, 6500);
+            // 3. Spell B A T R I S H A (Start 6s, 1s per letter)
+            const letters = ["B","A","T","R","I","S","H","A"];
+            letters.forEach((char, idx) => {
+                setTimeout(() => {
+                    animateToLetter(char, cx, cy);
+                }, 6000 + (idx * 1200));
+            });
 
-            // 4. FINAL HEART & MSG (After 9.5s)
+            // 4. Final: HEART & Message (After 16s)
             setTimeout(() => {
                 animateToShape((i, total) => {
                     const t = (i / total) * 2 * Math.PI;
                     const x = 16 * Math.pow(Math.sin(t), 3);
                     const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-                    return { x: cx + x * 12 - 37, y: cy + y * 12 - 37 };
+                    return { x: cx + x * 12 - 35, y: cy + y * 12 - 35 };
                 });
                 document.getElementById('final-msg').style.display = 'block';
-            }, 10000);
+            }, 16500);
+        }
+
+        function animateToLetter(char, cx, cy) {
+            activeImgs.forEach((img, i) => {
+                const p = i / activeImgs.length;
+                let tx, ty;
+                
+                if (char === "B") {
+                    if (p < 0.4) { tx = cx - 60; ty = cy - 100 + (p/0.4 * 200); }
+                    else { 
+                        const t = ((p-0.4)/0.6) * 2 * Math.PI;
+                        tx = cx - 60 + Math.sin(t) * 60;
+                        ty = cy - 100 + (t > Math.PI ? 150 : 50) + Math.cos(t) * 50;
+                    }
+                } else if (char === "A") {
+                    if (p < 0.5) { tx = cx - (p*2 * 80); ty = cy + 100 - (p*2 * 200); }
+                    else { tx = cx + ((p-0.5)*2 * 80); ty = cy - 100 + ((p-0.5)*2 * 200); }
+                } else if (char === "T") {
+                    if (p < 0.4) { tx = cx - 100 + (p/0.4 * 200); ty = cy - 100; }
+                    else { tx = cx; ty = cy - 100 + ((p-0.4)/0.6 * 200); }
+                } else if (char === "R") {
+                    if (p < 0.4) { tx = cx - 60; ty = cy - 100 + (p/0.4 * 200); }
+                    else if (p < 0.7) { 
+                        const t = ((p-0.4)/0.3) * Math.PI;
+                        tx = cx - 60 + Math.sin(t) * 70; ty = cy - 50 + Math.cos(t) * 50;
+                    } else { tx = cx - 60 + ((p-0.7)/0.3 * 100); ty = cy + ((p-0.7)/0.3 * 100); }
+                } else if (char === "I") {
+                    tx = cx; ty = cy - 100 + (p * 200);
+                } else if (char === "S") {
+                    const t = p * 2 * Math.PI;
+                    tx = cx + Math.sin(t) * 70;
+                    ty = cy - 100 + (p * 200) + Math.cos(t) * 30;
+                } else if (char === "H") {
+                    if (p < 0.4) { tx = cx - 70; ty = cy - 100 + (p/0.4 * 200); }
+                    else if (p > 0.6) { tx = cx + 70; ty = cy - 100 + ((1-p)/0.4 * 200); }
+                    else { tx = cx - 70 + ((p-0.4)/0.2 * 140); ty = cy; }
+                } else if (char === "A") {
+                    if (p < 0.5) { tx = cx - (p*2 * 80); ty = cy + 100 - (p*2 * 200); }
+                    else { tx = cx + ((p-0.5)*2 * 80); ty = cy - 100 + ((p-0.5)*2 * 200); }
+                }
+
+                img.animate([{ left: img.style.left, top: img.style.top }, { left: (tx-35)+'px', top: (ty-35)+'px' }], 
+                { duration: 800, easing: 'ease-out', fill: 'forwards' });
+                img.style.left = (tx-35)+'px'; img.style.top = (ty-35)+'px';
+            });
         }
 
         function animateToShape(getTarget) {
             activeImgs.forEach((img, i) => {
                 const target = getTarget(i, activeImgs.length);
-                img.animate([
-                    { left: img.style.left, top: img.style.top },
-                    { left: target.x + 'px', top: target.y + 'px' }
-                ], { duration: 2200, easing: 'ease-in-out', fill: 'forwards' });
+                img.animate([{ left: img.style.left, top: img.style.top }, { left: target.x + 'px', top: target.y + 'px' }], 
+                { duration: 2000, easing: 'ease-in-out', fill: 'forwards' });
                 img.style.left = target.x + 'px'; img.style.top = target.y + 'px';
             });
         }
