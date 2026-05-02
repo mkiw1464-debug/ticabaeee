@@ -30,6 +30,7 @@
             flex-direction: column; text-align: center;
         }
 
+        /* Glitch Animation for Text */
         .neon-text {
             font-family: 'Montserrat', sans-serif;
             font-size: 1.1rem;
@@ -39,6 +40,17 @@
             text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
             line-height: 2;
             padding: 0 30px;
+            position: relative;
+            animation: glitch 1.5s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); text-shadow: 0 0 10px var(--neon-pink); }
+            20% { transform: translate(-2px, 2px); text-shadow: 2px 0 red, -2px 0 blue; }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); text-shadow: -2px 0 var(--neon-pink), 2px 0 white; }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
         }
 
         .glass-card {
@@ -62,7 +74,7 @@
         #yes-btn, #yes-final { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
         #no-btn { background: white; color: black; position: relative; }
 
-        /* Gambar Bulat */
+        /* Gambar Bulat - ULTRA SLOW transition */
         .fly-img {
             position: absolute;
             width: 75px; height: 75px;
@@ -70,8 +82,7 @@
             border-radius: 50%;
             border: 3px solid var(--neon-pink);
             z-index: 50;
-            /* Transition diperlahankan untuk efek berkumpul yang lawa */
-            transition: all 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 5.0s cubic-bezier(0.3, 0, 0.2, 1); /* 5 saat bro! */
             pointer-events: none;
         }
 
@@ -108,10 +119,7 @@
             bottom: 10%;
             width: 100%;
             z-index: 200;
-            animation: fadeIn 2s ease;
         }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .footer {
             position: fixed;
@@ -128,7 +136,6 @@
 
     <canvas id="matrix"></canvas>
 
-    <!-- Tahap 1 -->
     <div id="stage-1" class="overlay">
         <div class="glass-card">
             <h2 class="neon-text">ARE YOU READY?</h2>
@@ -136,12 +143,10 @@
         </div>
     </div>
 
-    <!-- Tahap 2: Countdown -->
     <div id="stage-2" class="overlay" style="display:none;">
         <h1 id="cd-txt" class="neon-text" style="font-size: 4rem;"></h1>
     </div>
 
-    <!-- Tahap 3: Scrolling & Emojis -->
     <div id="stage-3" class="overlay" style="display:none; background: transparent;">
         <div id="scroll-box" class="scroll-container">
             <p class="neon-text">
@@ -150,7 +155,6 @@
         </div>
     </div>
 
-    <!-- Tahap 4: Pop Up Soalan -->
     <div id="stage-4" class="overlay" style="display:none;">
         <div class="glass-card">
             <h2 class="neon-text">WANNA SEE SOMETHING?</h2>
@@ -161,7 +165,6 @@
         </div>
     </div>
 
-    <!-- Tahap Akhir: Final Message -->
     <div id="final-msg">
         <h2 class="neon-text">SAYA SAYANGG AWAKKKK SANGATT SANGATTTT</h2>
     </div>
@@ -273,7 +276,6 @@
             activeImgs.forEach((img, index) => {
                 img.getAnimations().forEach(a => a.cancel());
                 
-                // Formula Hati (Heart Curve)
                 const t = (index / activeImgs.length) * 2 * Math.PI;
                 const x = 16 * Math.pow(Math.sin(t), 3);
                 const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
@@ -281,13 +283,13 @@
                 const centerX = window.innerWidth / 2;
                 const centerY = window.innerHeight / 2 - 30;
                 
-                // Posisi akhir dengan transition yang slow
+                // 5 saat transition untuk efek berkumpul perlahan
                 img.style.left = (centerX + x * 9 - 37) + 'px';
                 img.style.top = (centerY + y * 9 - 37) + 'px';
-                img.style.transform = 'scale(1.2)';
+                img.style.transform = 'scale(1.2) rotate(' + (Math.random() * 20 - 10) + 'deg)';
             });
 
-            setTimeout(() => { document.getElementById('final-msg').style.display = 'block'; }, 2000);
+            setTimeout(() => { document.getElementById('final-msg').style.display = 'block'; }, 4000);
         }
 
         document.addEventListener('contextmenu', e => e.preventDefault());
