@@ -6,191 +6,59 @@
     <title>For My Batrisha</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --maroon: #800000;
-            --neon-pink: #ff00ff;
-        }
-
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            background-color: black;
-            font-family: 'Montserrat', sans-serif;
-            color: white;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        :root { --maroon: #800000; --neon-pink: #ff00ff; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: black; font-family: 'Montserrat', sans-serif; color: white; }
         canvas { position: fixed; top: 0; left: 0; z-index: 1; pointer-events: none; }
-
-        .overlay {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 10; display: flex;
-            justify-content: center; align-items: center;
-            flex-direction: column; text-align: center;
-        }
-
-        .neon-text {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #fff;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
-            line-height: 1.8;
-            padding: 0 40px;
-            pointer-events: none;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 40px;
-            padding: 40px;
-            width: 85%;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        button {
-            padding: 15px 40px;
-            margin: 15px;
-            border-radius: 50px;
-            border: none;
-            font-weight: 800;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        button:active { transform: scale(0.9); }
-
-        #yes-btn, #yes-final { background: white; color: black; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
+        .neon-text { font-size: 1rem; font-weight: 600; color: #fff; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px var(--neon-pink); line-height: 1.8; padding: 0 40px; }
+        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border-radius: 40px; padding: 40px; width: 85%; border: 1px solid rgba(255, 255, 255, 0.1); }
+        button { padding: 15px 40px; margin: 15px; border-radius: 50px; border: none; font-weight: 800; cursor: pointer; }
+        #yes-btn, #yes-final { background: white; color: black; }
         #no-btn { background: transparent; border: 1px solid white; color: white; position: relative; }
-
-        .fly-img {
-            position: absolute;
-            width: 70px; height: 70px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid white;
-            z-index: 50;
-            /* Ultra Smooth Transition */
-            transition: all 2.8s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: top, left, transform;
-            pointer-events: none;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-        }
-
-        .emoji-float {
-            position: absolute;
-            bottom: -50px;
-            z-index: 40;
-            font-size: 1.2rem;
-            animation: floatUp linear forwards;
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(0); opacity: 0; }
-            10% { opacity: 0.6; }
-            100% { transform: translateY(-110vh); opacity: 0; }
-        }
-
-        .scroll-container {
-            position: absolute;
-            width: 100%;
-            z-index: 60;
-            animation: scrollUp 18s linear forwards;
-        }
-
-        @keyframes scrollUp {
-            0% { top: 100%; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 15%; opacity: 0; } 
-        }
-
-        #final-msg {
-            display: none;
-            position: fixed;
-            bottom: 8%;
-            width: 100%;
-            z-index: 200;
-            text-align: center;
-            animation: fadeIn 2s ease forwards;
-        }
-
+        .fly-img { position: absolute; width: 70px; height: 70px; object-fit: cover; border-radius: 50%; border: 2px solid white; z-index: 50; pointer-events: none; will-change: transform, top, left; }
+        .scroll-container { position: absolute; width: 100%; z-index: 60; animation: scrollUp 18s linear forwards; }
+        @keyframes scrollUp { 0% { top: 100%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 15%; opacity: 0; } }
+        #final-msg { display: none; position: fixed; bottom: 8%; width: 100%; z-index: 200; text-align: center; animation: fadeIn 2s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .footer {
-            position: fixed;
-            bottom: 15px;
-            width: 100%;
-            text-align: center;
-            font-size: 0.6rem;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.3);
-            text-transform: uppercase;
-            z-index: 210;
-        }
+        .footer { position: fixed; bottom: 15px; width: 100%; text-align: center; font-size: 0.6rem; color: rgba(255,255,255,0.3); z-index: 210; }
     </style>
 </head>
 <body>
-
     <canvas id="matrix"></canvas>
-
     <div id="stage-1" class="overlay">
         <div class="glass-card">
-            <h2 class="neon-text" style="font-weight:300;">ARE YOU READY?</h2>
+            <h2 class="neon-text">ARE YOU READY?</h2>
             <button id="yes-btn" onclick="startSequence()">PROCEED</button>
         </div>
     </div>
-
-    <div id="stage-2" class="overlay" style="display:none;">
-        <h1 id="cd-txt" class="neon-text" style="font-size: 3rem; font-weight: 800;"></h1>
-    </div>
-
-    <div id="stage-3" class="overlay" style="display:none; background: transparent;">
-        <div id="scroll-box" class="scroll-container">
+    <div id="stage-2" class="overlay" style="display:none;"><h1 id="cd-txt" class="neon-text" style="font-size: 3rem;"></h1></div>
+    <div id="stage-3" class="overlay" style="display:none;">
+        <div class="scroll-container">
             <p class="neon-text" style="text-transform: none; font-weight: 300;">
                 I love you more than words can ever express. <br><br>
-                I want to apologize for every mistake I've made, <br>
-                for every moment I wasn't my best self for you. <br><br>
                 You are the most precious person in my life, <br>
-                and I will always cherish every second we spend together. <br><br>
-                Missing you is my constant heartbeat, <br>
-                and loving you is the best decision I ever made. <br><br>
+                Missing you is my constant heartbeat. <br><br>
                 I am so deeply in love with you, Batrisha.
             </p>
         </div>
     </div>
-
     <div id="stage-4" class="overlay" style="display:none;">
         <div class="glass-card">
-            <h2 class="neon-text" style="font-weight: 300;">Something beautiful for you...</h2>
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <button id="yes-final" onclick="startMegaAnimation()">SHOW ME</button>
-                <button id="no-btn" onmouseover="moveNo()">NO</button>
-            </div>
+            <h2 class="neon-text">Something beautiful for you...</h2>
+            <button id="yes-final" onclick="startMegaAnimation()">SHOW ME</button>
         </div>
     </div>
-
     <div id="final-msg">
-        <p class="neon-text" style="font-size: 0.9rem; font-weight: 300; text-transform: none;">
+        <p class="neon-text" style="font-size: 0.9rem; text-transform: none; font-weight: 300;">
             here my prettyyyy girlfriend batrishaa hehe you’re naturally pretty without even trying, and everything about you just feels perfect to me iloveyouu sayanggg muahhhh hehehhe
         </p>
     </div>
-
     <div class="footer">MADE BY AKMALL</div>
 
     <script>
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         const name = "BATRISHA";
         const fontSize = 14;
         const columns = canvas.width / fontSize;
@@ -199,7 +67,7 @@
         function drawMatrix() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#800000'; 
+            ctx.fillStyle = '#800000';
             ctx.font = fontSize + 'px Montserrat';
             for (let i = 0; i < drops.length; i++) {
                 const text = name.charAt(Math.floor(Math.random() * name.length));
@@ -211,13 +79,10 @@
         setInterval(drawMatrix, 60);
 
         const imgUrls = [
-            'https://i.ibb.co/mCs6T5cR/IMG-5514.jpg',
-            'https://i.ibb.co/99PQ8Q52/IMG-5306.jpg',
+            'https://i.ibb.co/mCs6T5cR/IMG-5514.jpg', 'https://i.ibb.co/99PQ8Q52/IMG-5306.jpg',
             'https://i.ibb.co/CpktD9pm/0e89767b-8c56-49e0-a95d-a00625f03bd8.jpg',
-            'https://i.ibb.co/67VW0tyG/bc481f2e-352e-447d-89ec-9f0d40141afd.jpg',
-            'https://i.ibb.co/KpxgXbBP/e5e4a40f-562f-4b64-88fd-209675fc6711.jpg'
+            'https://i.ibb.co/67VW0tyG/bc481f2e-352e-447d-89ec-9f0d40141afd.jpg'
         ];
-        const emojis = ['🤍','✨','🌸','🕊️'];
         let activeImgs = [];
         let isFinal = false;
 
@@ -235,20 +100,8 @@
 
         function startEffects() {
             document.getElementById('stage-3').style.display = 'flex';
-            setInterval(spawnEmoji, 600);
-            for(let i=0; i<24; i++) { setTimeout(createImg, i * 350); }
+            for(let i=0; i<25; i++) { setTimeout(createImg, i * 400); }
             setTimeout(() => { document.getElementById('stage-4').style.display = 'flex'; }, 13000);
-        }
-
-        function spawnEmoji() {
-            const e = document.createElement('div');
-            e.className = 'emoji-float';
-            e.innerText = emojis[Math.floor(Math.random()*emojis.length)];
-            e.style.left = Math.random() * 100 + 'vw';
-            const dur = Math.random() * 4 + 5;
-            e.style.animationDuration = dur + 's';
-            document.body.appendChild(e);
-            setTimeout(() => e.remove(), dur * 1000);
         }
 
         function createImg() {
@@ -260,81 +113,56 @@
             img.style.top = '110vh';
             document.body.appendChild(img);
             activeImgs.push(img);
-            const dur = Math.random() * 4000 + 6000;
-            img.animate([{ top: '110vh' }, { top: '-20vh' }], { duration: dur, iterations: Infinity });
-        }
-
-        function moveNo() {
-            const btn = document.getElementById('no-btn');
-            btn.style.left = Math.random() * 70 + 'vw';
-            btn.style.top = Math.random() * 70 + 'vh';
-            btn.style.position = 'fixed';
+            img.animate([{ top: '110vh' }, { top: '-20vh' }], { duration: 8000, iterations: Infinity });
         }
 
         function startMegaAnimation() {
             isFinal = true;
             document.getElementById('stage-4').style.display = 'none';
             document.getElementById('stage-3').style.display = 'none';
-            
-            // Clean Stop Animations
             activeImgs.forEach(img => img.getAnimations().forEach(a => a.cancel()));
 
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2 - 30;
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight / 2 - 50;
 
-            // --- 1. Form "I" (0s - 3s) ---
-            activeImgs.forEach((img, i) => {
-                const step = 220 / activeImgs.length;
-                img.style.left = (centerX - 35) + 'px';
-                img.style.top = (centerY - 110 + (i * step)) + 'px';
-            });
-
-            // --- 2. Form "LOVE" (3s - 6s) ---
+            // --- ANIMATION SEQUENCE ---
+            // 1. To I
+            animateToShape(i => ({ x: cx - 35, y: cy - 120 + (i * 10) }));
+            
+            // 2. To U (After 3s)
             setTimeout(() => {
-                activeImgs.forEach((img, index) => {
-                    const t = (index / activeImgs.length) * 2 * Math.PI;
+                animateToShape((i, total) => {
+                    const p = i / total;
+                    if (p < 0.3) return { x: cx - 100, y: cy - 100 + (p * 600) };
+                    if (p > 0.7) return { x: cx + 100, y: cy - 100 + ((1-p) * 600) };
+                    const angle = ((p - 0.3) / 0.4) * Math.PI;
+                    return { x: cx + Math.cos(angle + Math.PI) * 100, y: cy + 80 + Math.sin(angle + Math.PI) * 60 };
+                });
+            }, 3500);
+
+            // 3. To Love & Message (After 7s)
+            setTimeout(() => {
+                animateToShape((i, total) => {
+                    const t = (i / total) * 2 * Math.PI;
                     const x = 16 * Math.pow(Math.sin(t), 3);
                     const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-                    img.style.left = (centerX + x * 10 - 35) + 'px';
-                    img.style.top = (centerY + y * 10 - 35) + 'px';
-                });
-            }, 3000);
-
-            // --- 3. Form "U" (6s - 9s) - CORRECTED ---
-            setTimeout(() => {
-                activeImgs.forEach((img, i) => {
-                    const percent = i / activeImgs.length;
-                    if (percent < 0.35) { // Left Bar
-                        img.style.left = (centerX - 90 - 35) + 'px';
-                        img.style.top = (centerY - 100 + (percent * 400)) + 'px';
-                    } else if (percent > 0.65) { // Right Bar
-                        img.style.left = (centerX + 90 - 35) + 'px';
-                        img.style.top = (centerY - 100 + ((1 - percent) * 400)) + 'px';
-                    } else { // Curved Bottom
-                        const tU = ((percent - 0.35) / 0.3) * Math.PI;
-                        const xU = Math.cos(tU + Math.PI) * 90;
-                        const yU = Math.sin(tU + Math.PI) * 70;
-                        img.style.left = (centerX + xU - 35) + 'px';
-                        img.style.top = (centerY + 40 + yU - 35) + 'px';
-                    }
-                });
-            }, 6000);
-
-            // --- FINAL: Heart Stay & Text (9s+) ---
-            setTimeout(() => {
-                activeImgs.forEach((img, index) => {
-                    const t = (index / activeImgs.length) * 2 * Math.PI;
-                    const x = 16 * Math.pow(Math.sin(t), 3);
-                    const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-                    img.style.left = (centerX + x * 11.5 - 35) + 'px';
-                    img.style.top = (centerY + y * 11.5 - 35) + 'px';
-                    img.style.transform = 'scale(1.1)';
+                    return { x: cx + x * 11 - 35, y: cy + y * 11 - 35 };
                 });
                 document.getElementById('final-msg').style.display = 'block';
-            }, 9500);
+            }, 7500);
         }
 
-        document.addEventListener('contextmenu', e => e.preventDefault());
+        function animateToShape(getTarget) {
+            activeImgs.forEach((img, i) => {
+                const target = getTarget(i, activeImgs.length);
+                img.animate([
+                    { left: img.style.left, top: img.style.top },
+                    { left: target.x + 'px', top: target.y + 'px' }
+                ], { duration: 2500, easing: 'ease-in-out', fill: 'forwards' });
+                img.style.left = target.x + 'px';
+                img.style.top = target.y + 'px';
+            });
+        }
     </script>
 </body>
 </html>
