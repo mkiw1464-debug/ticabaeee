@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For My Batrisha</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --maroon: #800000;
+            --soft-pink: #ff8fab;
             --neon-pink: #ff00ff;
         }
 
@@ -16,7 +17,7 @@
             width: 100%; height: 100%;
             overflow: hidden;
             background-color: black;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             color: white;
         }
 
@@ -30,74 +31,66 @@
             flex-direction: column; text-align: center;
         }
 
-        /* Glitch Animation for Text */
         .neon-text {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 800;
+            font-size: 1rem;
+            font-weight: 600;
             color: #fff;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
-            line-height: 2;
-            padding: 0 30px;
-            position: relative;
-            animation: glitch 1.5s infinite;
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); text-shadow: 0 0 10px var(--neon-pink); }
-            20% { transform: translate(-2px, 2px); text-shadow: 2px 0 red, -2px 0 blue; }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); text-shadow: -2px 0 var(--neon-pink), 2px 0 white; }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
+            line-height: 1.8;
+            padding: 0 40px;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            border-radius: 30px;
-            padding: 30px;
-            width: 80%;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 40px;
+            width: 85%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         button {
-            padding: 12px 35px;
-            margin: 10px;
+            padding: 15px 40px;
+            margin: 15px;
             border-radius: 50px;
             border: none;
-            font-weight: bold;
+            font-weight: 800;
+            letter-spacing: 1px;
             cursor: pointer;
+            transition: 0.3s;
         }
 
-        #yes-btn, #yes-final { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
-        #no-btn { background: white; color: black; position: relative; }
+        #yes-btn, #yes-final { background: white; color: black; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
+        #no-btn { background: transparent; border: 1px solid white; color: white; position: relative; }
 
-        /* Gambar Bulat - ULTRA SLOW transition */
+        /* Gambar Bulat - Premium Clean */
         .fly-img {
             position: absolute;
-            width: 75px; height: 75px;
+            width: 80px; height: 80px;
             object-fit: cover;
             border-radius: 50%;
-            border: 3px solid var(--neon-pink);
+            border: 2px solid white;
             z-index: 50;
-            transition: all 5.0s cubic-bezier(0.3, 0, 0.2, 1); /* 5 saat bro! */
+            /* Pergerakan Ultra Slow & Smooth */
+            transition: all 6.0s cubic-bezier(0.25, 1, 0.5, 1);
             pointer-events: none;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
 
         .emoji-float {
             position: absolute;
             bottom: -50px;
             z-index: 40;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             animation: floatUp linear forwards;
+            opacity: 0.6;
         }
 
         @keyframes floatUp {
             0% { transform: translateY(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
+            10% { opacity: 0.6; }
             100% { transform: translateY(-110vh); opacity: 0; }
         }
 
@@ -105,29 +98,36 @@
             position: absolute;
             width: 100%;
             z-index: 60;
-            animation: scrollUp 12s linear forwards;
+            animation: scrollUp 18s linear forwards;
         }
 
         @keyframes scrollUp {
-            0% { top: 100%; }
-            100% { top: 35%; } 
+            0% { top: 100%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 15%; opacity: 0; } 
         }
 
         #final-msg {
             display: none;
             position: fixed;
-            bottom: 10%;
+            bottom: 12%;
             width: 100%;
             z-index: 200;
+            animation: fadeIn 3s ease forwards;
         }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .footer {
             position: fixed;
-            bottom: 10px;
+            bottom: 15px;
             width: 100%;
             text-align: center;
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.4);
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
             z-index: 210;
         }
     </style>
@@ -138,38 +138,45 @@
 
     <div id="stage-1" class="overlay">
         <div class="glass-card">
-            <h2 class="neon-text">ARE YOU READY?</h2>
-            <button id="yes-btn" onclick="startSequence()">YES</button>
+            <h2 class="neon-text" style="font-weight:300;">ARE YOU READY?</h2>
+            <button id="yes-btn" onclick="startSequence()">PROCEED</button>
         </div>
     </div>
 
     <div id="stage-2" class="overlay" style="display:none;">
-        <h1 id="cd-txt" class="neon-text" style="font-size: 4rem;"></h1>
+        <h1 id="cd-txt" class="neon-text" style="font-size: 3rem; font-weight: 800;"></h1>
     </div>
 
     <div id="stage-3" class="overlay" style="display:none; background: transparent;">
         <div id="scroll-box" class="scroll-container">
-            <p class="neon-text">
-                SAYA SAYANGG AWAK SANGAT SANGATTT TAUUU HURMM SAYA MINTA MAAFF KALAU SAYA ADA BUAT SALAH DENGAN AWAKKK SAYA MINTA MAAFFF TAUUU SAYANGGGGG SAYA SAYANGGGG AWAKKK SANGATTT SANGATTT SAYA SENTIASAA RINDUU AWAKKKK HEHEHHEHE LOPYYUUU CAYANGGGG
+            <p class="neon-text" style="text-transform: none; font-weight: 300;">
+                I love awak more than words can ever express. <br><br>
+                Saya want to apologize for every mistake I've made, <br>
+                for every moment I wasn't my best self for awak. <br><br>
+                Awak are the most precious person in my life, <br>
+                and saya will always cherish every second we spend together. <br><br>
+                Missing awak is my constant heartbeat, <br>
+                and loving awak is the best decision saya ever made. <br><br>
+                I am so deeply in love with awak, Batrisha.
             </p>
         </div>
     </div>
 
     <div id="stage-4" class="overlay" style="display:none;">
         <div class="glass-card">
-            <h2 class="neon-text">WANNA SEE SOMETHING?</h2>
-            <div style="display: flex; justify-content: center;">
-                <button id="yes-final" onclick="formHeart()">YES</button>
+            <h2 class="neon-text" style="font-weight: 300;">Something beautiful for awak...</h2>
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <button id="yes-final" onclick="formHeart()">SHOW ME</button>
                 <button id="no-btn" onmouseover="moveNo()">NO</button>
             </div>
         </div>
     </div>
 
     <div id="final-msg">
-        <h2 class="neon-text">SAYA SAYANGG AWAKKKK SANGATT SANGATTTT</h2>
+        <h2 class="neon-text" style="font-size: 0.9rem; font-weight: 300;">Saya sayang awak selamanya.</h2>
     </div>
 
-    <div class="footer">by akmall</div>
+    <div class="footer">MADE BY AKMALL</div>
 
     <script>
         const canvas = document.getElementById('matrix');
@@ -177,24 +184,24 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const name = "NURBATRISHA";
-        const fontSize = 16;
+        const name = "BATRISHA";
+        const fontSize = 14;
         const columns = canvas.width / fontSize;
         const drops = Array(Math.floor(columns)).fill(1);
 
         function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#800000';
-            ctx.font = fontSize + 'px monospace';
+            ctx.fillStyle = '#400000'; // Darker maroon for a cleaner look
+            ctx.font = fontSize + 'px Montserrat';
             for (let i = 0; i < drops.length; i++) {
                 const text = name.charAt(Math.floor(Math.random() * name.length));
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.985) drops[i] = 0;
                 drops[i]++;
             }
         }
-        setInterval(drawMatrix, 50);
+        setInterval(drawMatrix, 60);
 
         const imgUrls = [
             'https://i.ibb.co/mCs6T5cR/IMG-5514.jpg',
@@ -203,7 +210,7 @@
             'https://i.ibb.co/67VW0tyG/bc481f2e-352e-447d-89ec-9f0d40141afd.jpg',
             'https://i.ibb.co/KpxgXbBP/e5e4a40f-562f-4b64-88fd-209675fc6711.jpg'
         ];
-        const emojis = ['💘','💓','💕','💞','💝','💖','💗'];
+        const emojis = ['🤍','✨','🌸','🕊️'];
         let activeImgs = [];
         let isFinal = false;
 
@@ -211,7 +218,7 @@
             document.getElementById('stage-1').style.display = 'none';
             document.getElementById('stage-2').style.display = 'flex';
             const txt = document.getElementById('cd-txt');
-            const q = ['3','2','1','SAYA','SAYANG','AWAK'];
+            const q = ['READY?','SAYA','SAYANG','AWAK'];
             let i = 0;
             const timer = setInterval(() => {
                 if(i < q.length) { txt.innerText = q[i]; i++; }
@@ -220,14 +227,14 @@
                     document.getElementById('stage-2').style.display='none'; 
                     startEffects(); 
                 }
-            }, 800);
+            }, 1000);
         }
 
         function startEffects() {
             document.getElementById('stage-3').style.display = 'flex';
-            setInterval(spawnEmoji, 400);
-            for(let i=0; i<15; i++) { setTimeout(createImg, i * 500); }
-            setTimeout(() => { document.getElementById('stage-4').style.display = 'flex'; }, 8000);
+            setInterval(spawnEmoji, 600);
+            for(let i=0; i<18; i++) { setTimeout(createImg, i * 400); }
+            setTimeout(() => { document.getElementById('stage-4').style.display = 'flex'; }, 13000);
         }
 
         function spawnEmoji() {
@@ -235,7 +242,7 @@
             e.className = 'emoji-float';
             e.innerText = emojis[Math.floor(Math.random()*emojis.length)];
             e.style.left = Math.random() * 100 + 'vw';
-            const dur = Math.random() * 3 + 4;
+            const dur = Math.random() * 4 + 5;
             e.style.animationDuration = dur + 's';
             document.body.appendChild(e);
             setTimeout(() => e.remove(), dur * 1000);
@@ -254,9 +261,9 @@
         }
 
         function animateImg(el) {
-            const dur = Math.random() * 3000 + 5000;
+            const dur = Math.random() * 4000 + 6000;
             const anim = el.animate([
-                { top: '110vh' }, { top: '-15vh' }
+                { top: '110vh' }, { top: '-20vh' }
             ], { duration: dur, iterations: Infinity });
             el.dataset.animId = anim;
         }
@@ -281,15 +288,16 @@
                 const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
                 
                 const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2 - 30;
+                const centerY = window.innerHeight / 2 - 20;
                 
-                // 5 saat transition untuk efek berkumpul perlahan
-                img.style.left = (centerX + x * 9 - 37) + 'px';
-                img.style.top = (centerY + y * 9 - 37) + 'px';
-                img.style.transform = 'scale(1.2) rotate(' + (Math.random() * 20 - 10) + 'deg)';
+                // Extra Slow 6.0s for the most romantic gathering effect
+                img.style.left = (centerX + x * 10 - 40) + 'px';
+                img.style.top = (centerY + y * 10 - 40) + 'px';
+                img.style.transform = 'scale(1.2)';
+                img.style.borderColor = 'rgba(255, 255, 255, 0.8)';
             });
 
-            setTimeout(() => { document.getElementById('final-msg').style.display = 'block'; }, 4000);
+            setTimeout(() => { document.getElementById('final-msg').style.display = 'block'; }, 4500);
         }
 
         document.addEventListener('contextmenu', e => e.preventDefault());
