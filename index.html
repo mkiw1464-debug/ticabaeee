@@ -12,9 +12,7 @@
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
         .neon-text { font-size: 1rem; font-weight: 600; color: #fff; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px var(--neon-pink); line-height: 1.8; padding: 0 40px; }
         .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border-radius: 40px; padding: 40px; width: 85%; border: 1px solid rgba(255, 255, 255, 0.1); }
-        button { padding: 15px 40px; margin: 15px; border-radius: 50px; border: none; font-weight: 800; cursor: pointer; }
-        #yes-btn, #yes-final { background: white; color: black; }
-        #no-btn { background: transparent; border: 1px solid white; color: white; position: relative; }
+        button { padding: 15px 40px; margin: 15px; border-radius: 50px; border: none; font-weight: 800; cursor: pointer; background: white; color: black; }
         .fly-img { position: absolute; width: 70px; height: 70px; object-fit: cover; border-radius: 50%; border: 2px solid white; z-index: 50; pointer-events: none; will-change: transform, top, left; }
         .scroll-container { position: absolute; width: 100%; z-index: 60; animation: scrollUp 18s linear forwards; }
         @keyframes scrollUp { 0% { top: 100%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 15%; opacity: 0; } }
@@ -28,7 +26,7 @@
     <div id="stage-1" class="overlay">
         <div class="glass-card">
             <h2 class="neon-text">ARE YOU READY?</h2>
-            <button id="yes-btn" onclick="startSequence()">PROCEED</button>
+            <button onclick="startSequence()">PROCEED</button>
         </div>
     </div>
     <div id="stage-2" class="overlay" style="display:none;"><h1 id="cd-txt" class="neon-text" style="font-size: 3rem;"></h1></div>
@@ -45,7 +43,7 @@
     <div id="stage-4" class="overlay" style="display:none;">
         <div class="glass-card">
             <h2 class="neon-text">Something beautiful for you...</h2>
-            <button id="yes-final" onclick="startMegaAnimation()">SHOW ME</button>
+            <button onclick="startMegaAnimation()">SHOW ME</button>
         </div>
     </div>
     <div id="final-msg">
@@ -60,21 +58,17 @@
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         const name = "BATRISHA";
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(1);
+        const drops = Array(Math.floor(canvas.width / 14)).fill(1);
 
         function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#800000';
-            ctx.font = fontSize + 'px Montserrat';
-            for (let i = 0; i < drops.length; i++) {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#800000'; ctx.font = '14px Montserrat';
+            drops.forEach((y, i) => {
                 const text = name.charAt(Math.floor(Math.random() * name.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.985) drops[i] = 0;
+                ctx.fillText(text, i * 14, y * 14);
+                if (y * 14 > canvas.height && Math.random() > 0.985) drops[i] = 0;
                 drops[i]++;
-            }
+            });
         }
         setInterval(drawMatrix, 60);
 
@@ -89,18 +83,16 @@
         function startSequence() {
             document.getElementById('stage-1').style.display = 'none';
             document.getElementById('stage-2').style.display = 'flex';
-            const txt = document.getElementById('cd-txt');
-            const q = ['READY?','I','LOVE','YOU'];
-            let i = 0;
+            const q = ['READY?','I','LOVE','YOU']; let i = 0;
             const timer = setInterval(() => {
-                if(i < q.length) { txt.innerText = q[i]; i++; }
+                if(i < q.length) { document.getElementById('cd-txt').innerText = q[i]; i++; }
                 else { clearInterval(timer); document.getElementById('stage-2').style.display='none'; startEffects(); }
             }, 1000);
         }
 
         function startEffects() {
             document.getElementById('stage-3').style.display = 'flex';
-            for(let i=0; i<25; i++) { setTimeout(createImg, i * 400); }
+            for(let i=0; i<24; i++) { setTimeout(createImg, i * 400); }
             setTimeout(() => { document.getElementById('stage-4').style.display = 'flex'; }, 13000);
         }
 
@@ -108,11 +100,8 @@
             if(isFinal) return;
             const img = document.createElement('img');
             img.src = imgUrls[Math.floor(Math.random() * imgUrls.length)];
-            img.className = 'fly-img';
-            img.style.left = Math.random() * 80 + 'vw';
-            img.style.top = '110vh';
-            document.body.appendChild(img);
-            activeImgs.push(img);
+            img.className = 'fly-img'; img.style.left = Math.random() * 80 + 'vw'; img.style.top = '110vh';
+            document.body.appendChild(img); activeImgs.push(img);
             img.animate([{ top: '110vh' }, { top: '-20vh' }], { duration: 8000, iterations: Infinity });
         }
 
@@ -125,31 +114,44 @@
             const cx = window.innerWidth / 2;
             const cy = window.innerHeight / 2 - 50;
 
-            // --- ANIMATION SEQUENCE ---
-            // 1. To I
-            animateToShape(i => ({ x: cx - 35, y: cy - 120 + (i * 10) }));
+            // --- 1. Form "I" (0s) ---
+            animateToShape((i, total) => ({ x: cx - 35, y: cy - 120 + (i * (240/total)) }));
             
-            // 2. To U (After 3s)
-            setTimeout(() => {
-                animateToShape((i, total) => {
-                    const p = i / total;
-                    if (p < 0.3) return { x: cx - 100, y: cy - 100 + (p * 600) };
-                    if (p > 0.7) return { x: cx + 100, y: cy - 100 + ((1-p) * 600) };
-                    const angle = ((p - 0.3) / 0.4) * Math.PI;
-                    return { x: cx + Math.cos(angle + Math.PI) * 100, y: cy + 80 + Math.sin(angle + Math.PI) * 60 };
-                });
-            }, 3500);
-
-            // 3. To Love & Message (After 7s)
+            // --- 2. Form "LOVE" (After 3s) ---
             setTimeout(() => {
                 animateToShape((i, total) => {
                     const t = (i / total) * 2 * Math.PI;
                     const x = 16 * Math.pow(Math.sin(t), 3);
                     const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-                    return { x: cx + x * 11 - 35, y: cy + y * 11 - 35 };
+                    return { x: cx + x * 10 - 35, y: cy + y * 10 - 35 };
+                });
+            }, 3000);
+
+            // --- 3. Form "U" (After 6s) - FIXED LOGIC ---
+            setTimeout(() => {
+                animateToShape((i, total) => {
+                    const p = i / total;
+                    if (p < 0.33) { // Left Vertical
+                        return { x: cx - 90, y: cy - 100 + (p * 3 * 180) };
+                    } else if (p > 0.66) { // Right Vertical
+                        return { x: cx + 90, y: cy - 100 + ((1-p) * 3 * 180) };
+                    } else { // Curved Bottom
+                        const tU = ((p - 0.33) / 0.33) * Math.PI;
+                        return { x: cx + Math.cos(tU + Math.PI) * 90, y: cy + 80 + Math.sin(tU + Math.PI) * 60 };
+                    }
+                });
+            }, 6000);
+
+            // --- 4. Final: "LOVE" & Message (After 9s) ---
+            setTimeout(() => {
+                animateToShape((i, total) => {
+                    const t = (i / total) * 2 * Math.PI;
+                    const x = 16 * Math.pow(Math.sin(t), 3);
+                    const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                    return { x: cx + x * 11.5 - 35, y: cy + y * 11.5 - 35 };
                 });
                 document.getElementById('final-msg').style.display = 'block';
-            }, 7500);
+            }, 9500);
         }
 
         function animateToShape(getTarget) {
@@ -158,9 +160,8 @@
                 img.animate([
                     { left: img.style.left, top: img.style.top },
                     { left: target.x + 'px', top: target.y + 'px' }
-                ], { duration: 2500, easing: 'ease-in-out', fill: 'forwards' });
-                img.style.left = target.x + 'px';
-                img.style.top = target.y + 'px';
+                ], { duration: 2000, easing: 'ease-in-out', fill: 'forwards' });
+                img.style.left = target.x + 'px'; img.style.top = target.y + 'px';
             });
         }
     </script>
