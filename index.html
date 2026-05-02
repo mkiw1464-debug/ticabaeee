@@ -8,7 +8,6 @@
     <style>
         :root {
             --maroon: #800000;
-            --soft-pink: #ff8fab;
             --neon-pink: #ff00ff;
         }
 
@@ -72,6 +71,7 @@
             border-radius: 50%;
             border: 2px solid white;
             z-index: 50;
+            /* Pergerakan ultra smooth tanpa glitch */
             transition: all 2.5s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
@@ -106,7 +106,6 @@
             100% { top: 15%; opacity: 0; } 
         }
 
-        /* Positioned BELOW the heart */
         #final-msg {
             display: none;
             position: fixed;
@@ -255,12 +254,8 @@
             img.style.top = '110vh';
             document.body.appendChild(img);
             activeImgs.push(img);
-            animateImg(img);
-        }
-
-        function animateImg(el) {
             const dur = Math.random() * 4000 + 6000;
-            const anim = el.animate([{ top: '110vh' }, { top: '-20vh' }], { duration: dur, iterations: Infinity });
+            img.animate([{ top: '110vh' }, { top: '-20vh' }], { duration: dur, iterations: Infinity });
         }
 
         function moveNo() {
@@ -274,21 +269,19 @@
             isFinal = true;
             document.getElementById('stage-4').style.display = 'none';
             document.getElementById('stage-3').style.display = 'none';
-            
-            // Stop current floating animations
             activeImgs.forEach(img => img.getAnimations().forEach(a => a.cancel()));
 
             const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2 - 50;
+            const centerY = window.innerHeight / 2 - 40;
 
-            // Step 1: Form "I"
+            // Step 1: Form "I" (3s)
             activeImgs.forEach((img, i) => {
-                const yPos = (i / activeImgs.length) * 200 - 100;
+                const yPos = (i / activeImgs.length) * 240 - 120;
                 img.style.left = (centerX - 35) + 'px';
                 img.style.top = (centerY + yPos) + 'px';
             });
 
-            // Step 2: Form "LOVE" (Heart Shape)
+            // Step 2: Form "LOVE" (Heart Shape) (3s)
             setTimeout(() => {
                 activeImgs.forEach((img, index) => {
                     const t = (index / activeImgs.length) * 2 * Math.PI;
@@ -299,23 +292,27 @@
                 });
             }, 3000);
 
-            // Step 3: Form "U"
+            // Step 3: Form Corrected "U" Shape (3s)
             setTimeout(() => {
                 activeImgs.forEach((img, i) => {
-                    const t = (i / activeImgs.length) * Math.PI;
-                    const x = Math.cos(t + Math.PI) * 100;
-                    const y = Math.sin(t + Math.PI) * 100;
-                    if(i < activeImgs.length/2) { // Sides of U
-                         img.style.left = (centerX + (i % 2 === 0 ? -100 : 100) - 35) + 'px';
-                         img.style.top = (centerY - 100 + (i*10)) + 'px';
-                    } else { // Bottom of U
-                         img.style.left = (centerX + x - 35) + 'px';
-                         img.style.top = (centerY + y - 35) + 'px';
+                    const ratio = i / activeImgs.length;
+                    if (ratio < 0.4) { // Left vertical line
+                        img.style.left = (centerX - 100 - 35) + 'px';
+                        img.style.top = (centerY - 100 + (ratio * 500)) + 'px';
+                    } else if (ratio > 0.6) { // Right vertical line
+                        img.style.left = (centerX + 100 - 35) + 'px';
+                        img.style.top = (centerY - 100 + ((1 - ratio) * 500)) + 'px';
+                    } else { // Bottom curve of U
+                        const tU = ((ratio - 0.4) / 0.2) * Math.PI;
+                        const xU = Math.cos(tU + Math.PI) * 100;
+                        const yU = Math.sin(tU + Math.PI) * 80;
+                        img.style.left = (centerX + xU - 35) + 'px';
+                        img.style.top = (centerY + 100 + yU - 35) + 'px';
                     }
                 });
             }, 6000);
 
-            // Final: Back to Heart & Show Text
+            // Final: Heart Stay & Text Appears (9s onwards)
             setTimeout(() => {
                 activeImgs.forEach((img, index) => {
                     const t = (index / activeImgs.length) * 2 * Math.PI;
@@ -326,7 +323,7 @@
                     img.style.transform = 'scale(1.1)';
                 });
                 document.getElementById('final-msg').style.display = 'block';
-            }, 9000);
+            }, 9500);
         }
 
         document.addEventListener('contextmenu', e => e.preventDefault());
