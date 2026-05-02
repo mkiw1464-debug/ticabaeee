@@ -31,7 +31,6 @@
             flex-direction: column; text-align: center;
         }
 
-        /* All words set to Neon Glow */
         .neon-text {
             font-size: 1rem;
             font-weight: 600;
@@ -61,7 +60,6 @@
             letter-spacing: 1px;
             cursor: pointer;
             transition: 0.3s;
-            text-shadow: 0 0 5px rgba(0,0,0,0.2);
         }
 
         #yes-btn, #yes-final { background: white; color: black; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
@@ -108,12 +106,16 @@
             100% { top: 15%; opacity: 0; } 
         }
 
+        /* Center alignment for the final romantic speech */
         #final-msg {
             display: none;
             position: fixed;
-            bottom: 12%;
-            width: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
             z-index: 200;
+            text-align: center;
             animation: fadeIn 3s ease forwards;
         }
 
@@ -150,21 +152,21 @@
     <div id="stage-3" class="overlay" style="display:none; background: transparent;">
         <div id="scroll-box" class="scroll-container">
             <p class="neon-text" style="text-transform: none; font-weight: 300;">
-                I love awak more than words can ever express. <br><br>
-                Saya want to apologize for every mistake I've made, <br>
-                for every moment I wasn't my best self for awak. <br><br>
-                Awak are the most precious person in my life, <br>
-                and saya will always cherish every second we spend together. <br><br>
-                Missing awak is my constant heartbeat, <br>
-                and loving awak is the best decision saya ever made. <br><br>
-                I am so deeply in love with awak, Batrisha.
+                I love you more than words can ever express. <br><br>
+                I want to apologize for every mistake I've made, <br>
+                for every moment I wasn't my best self for you. <br><br>
+                You are the most precious person in my life, <br>
+                and I will always cherish every second we spend together. <br><br>
+                Missing you is my constant heartbeat, <br>
+                and loving you is the best decision I ever made. <br><br>
+                I am so deeply in love with you, Batrisha.
             </p>
         </div>
     </div>
 
     <div id="stage-4" class="overlay" style="display:none;">
         <div class="glass-card">
-            <h2 class="neon-text" style="font-weight: 300;">Something beautiful for awak...</h2>
+            <h2 class="neon-text" style="font-weight: 300;">Something beautiful for you...</h2>
             <div style="display: flex; justify-content: center; margin-top: 20px;">
                 <button id="yes-final" onclick="formHeart()">SHOW ME</button>
                 <button id="no-btn" onmouseover="moveNo()">NO</button>
@@ -172,8 +174,9 @@
         </div>
     </div>
 
+    <!-- Final Centered Message -->
     <div id="final-msg">
-        <p class="neon-text" style="font-size: 0.9rem; font-weight: 300; text-transform: none;">
+        <p class="neon-text" style="font-size: 0.95rem; font-weight: 300; text-transform: none; padding: 0;">
             here my prettyyyy girlfriend batrishaa hehe you’re naturally pretty without even trying, and everything about you just feels perfect to me iloveyouu sayanggg muahhhh hehehhe
         </p>
     </div>
@@ -194,7 +197,6 @@
         function drawMatrix() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            // Matrix maroon cerah sikit (Visible)
             ctx.fillStyle = '#800000'; 
             ctx.font = fontSize + 'px Montserrat';
             for (let i = 0; i < drops.length; i++) {
@@ -221,7 +223,7 @@
             document.getElementById('stage-1').style.display = 'none';
             document.getElementById('stage-2').style.display = 'flex';
             const txt = document.getElementById('cd-txt');
-            const q = ['READY?','SAYA','SAYANG','AWAK'];
+            const q = ['READY?','I','LOVE','YOU'];
             let i = 0;
             const timer = setInterval(() => {
                 if(i < q.length) { txt.innerText = q[i]; i++; }
@@ -291,12 +293,11 @@
                 const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
                 
                 const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2 - 20;
+                const centerY = window.innerHeight / 2; // Perfectly centered
                 
                 img.style.left = (centerX + x * 10 - 40) + 'px';
                 img.style.top = (centerY + y * 10 - 40) + 'px';
                 img.style.transform = 'scale(1.2)';
-                img.style.borderColor = 'rgba(255, 255, 255, 0.8)';
             });
 
             setTimeout(() => { document.getElementById('final-msg').style.display = 'block'; }, 4500);
